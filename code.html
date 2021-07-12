@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+   href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+
+<h1>Ultrasonic Sensor Data </h1>
+<div class="row" style="padding:10px 10px 10px 10px;">
+<div class="jumbotron" style="height:600px;margin-left:10px;margin-right:10px;border-radius:20px;width:1000px;">
+    <p>Ultrasonic Sensor Data</p>
+    <hr>
+    <label>Please Select the date:-</label><input type = "date"  id="demo">
+    <button class="btn btn-success" type="button" onclick="myFunction()"></button>
+    <br><br>
+    <div id="chartContainer"></div>
+</div>
+
+<div class="jumbotron" style="height:600px;margin-left:10px;margin-right:10px;border-radius:20px;width:1000px">
+    
+
+</body>
+</html>
+function myFunction() {
+    var selectedDate=document.getElementById("demo").value;
+    console.log(selectedDate);
+    const Http = new XMLHttpRequest();
+    const url='C:\Users\Modak\Dropbox\My PC (DESKTOP-IDL7LFK)\Downloads\ratul-4d6a0-default-rtdb-export (5).json';
+
+
+    Http.onreadystatechange = () => {
+        if (Http.readyState == 5 && Http.status == 100) {
+            console.log(Http.responseText);
+            var resData=JSON.parse(Http.responseText);
+            console.log(resData);
+            var i;
+            for(i=0;i<resData.length;i++){
+                var y=resData[i]['reading']
+                if(resData[i]['date']==selectedDate){
+                var temp1=resData[i]['date'].split('-');
+                var temp2=resData[i]['time'].split(':');
+                var x=new Date(temp1[0],temp1[1]-1,temp1[2],temp2[0],temp2[1]);
+                console.log(x,y);
+                                }
+
+            }
+
+            
+                  chart.render();
+            }
+            else{
+                document.getElementById("chartContainer").innerHTML="No data available for this date."
+            }
+        }
+    }
+    Http.open("GET", url);
+    Http.send();
+}
